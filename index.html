@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aza Dent | Премиальная стоматология</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header id="header">
+      <div class="container nav-container">
+        <div class="bg-logo-text-large">Aza Dent</div>
+        <div class="container hero-content"></div>
+        <nav id="menu">
+          <a href="#services">Услуги</a>
+          <a href="#doctors">Врачи</a>
+          <a href="#interactive-map">Цены</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+        <div class="header-actions">
+          <a href="#appointment" class="btn btn-sm">Записаться</a>
+          <div id="burger"><span></span></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-glass-panel fade-in">
+          <h1>Эстетическая стоматология <span>без боли</span></h1>
+          <p>Мировые стандарты лечения и безупречный сервис в Самаре</p>
+          <div class="hero-btns">
+            <a href="#appointment" class="btn">Записаться на прием</a>
+            <a href="#prices" class="btn btn-outline">Узнать стоимость</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features container">
+      <div class="card fade-in">
+        <h3>Безболезненно</h3>
+        <p>Современная анестезия</p>
+      </div>
+      <div class="card fade-in">
+        <h3>Опыт 6+ лет</h3>
+        <p>Врачи высшей категории и эксперты отрасли</p>
+      </div>
+      <div class="card fade-in">
+        <h3>Технологии</h3>
+        <p>Европейское оборудование последнего поколения</p>
+      </div>
+      <div class="card fade-in">
+        <h3>Сервис</h3>
+        <p>Индивидуальное сопровождение каждого пациента</p>
+      </div>
+    </section>
+
+    <section id="services" class="container">
+      <h2 class="section-title fade-in">Наши услуги</h2>
+      <div class="grid">
+        <div class="service-card fade-in">
+          <h3>Терапия</h3>
+          <p>Лечение кариеса и эстетическая реставрация</p>
+        </div>
+        <div class="service-card fade-in">
+          <h3>Имплантация</h3>
+          <p>Восстановление зубов системами Nobel и Neodent</p>
+        </div>
+        <div class="service-card fade-in">
+          <h3>Ортодонтия</h3>
+          <p>Брекеты и прозрачные элайнеры</p>
+        </div>
+        <div class="service-card fade-in">
+          <h3>Гигиена</h3>
+          <p>Профессиональная чистка по протоколу GBT</p>
+        </div>
+      </div>
+    </section>
+    <section id="doctors" class="container">
+      <h2 class="section-title fade-in">Наши специалисты</h2>
+      <div class="grid">
+        <div class="card-container">
+          <div class="card">
+            <div class="img-content">
+              <img src="/photoes/photo.jpg" alt="Доктор" />
+            </div>
+            <div class="content">
+              <p class="spec">Стоматолог-ортодонт (Главный врач)</p>
+              <p class="heading">Аскар Зафарович</p>
+              <p class="exp">Стаж работы: 10 лет</p>
+              <a href="portfolio.html" class="portfolio-link"
+                >История лечения и отзывы</a
+              >
+              <a href="#appointment" class="btn">Записаться</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-container">
+          <div class="card">
+            <div class="img-content">
+              <img src=".jpg" alt="Доктор" />
+            </div>
+            <div class="content">
+              <p class="spec">Стоматолог-ортопед</p>
+              <p class="heading">Иван Иванов</p>
+              <p class="exp">Стаж работы: 10 лет</p>
+              <a href="#appointment" class="btn">Записаться</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-container">
+          <div class="card">
+            <div class="img-content">
+              <img src=".jpg" alt="Доктор" />
+            </div>
+            <div class="content">
+              <p class="spec">Стоматолог-ортопед</p>
+              <p class="heading">Иван Иванов</p>
+              <p class="exp">Стаж работы: 10 лет</p>
+              <a href="#appointment" class="btn">Записаться</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="interactive-map"
+      class="container"
+      style="padding: 100px 0 50px"
+    >
+      <h2 class="section-title">Интерактивный прайс-лист</h2>
+      <div class="map-wrapper">
+        <div style="text-align: center; margin-top: 40px">
+          <button id="price-toggle-btn" class="btn price-action-btn">
+            Показать весь прайс-лист
+          </button>
+        </div>
+
+        <div id="price-drawer" class="price-drawer">
+          <div class="drawer-header">
+            <h2>Полный прайс-лист</h2>
+            <button id="close-drawer-btn" class="close-btn">✖</button>
+          </div>
+
+          <div class="drawer-content">
+            <details class="price-category">
+              <summary>Терапия (Лечение зубов)</summary>
+              <ul>
+                <li>
+                  <span>Комплексная консультация</span> <span>2 000 ₽</span>
+                </li>
+                <li>
+                  <span>Прицельный снимок (рентген)</span> <span>500 ₽</span>
+                </li>
+                <li>
+                  <span>Лечение среднего кариеса</span> <span>3 500 ₽</span>
+                </li>
+                <li>
+                  <span>Лечение глубокого кариеса</span> <span>4 500 ₽</span>
+                </li>
+                <li>
+                  <span>Лечение пульпита (1-4 канала)</span>
+                  <span>от 3 000 ₽</span>
+                </li>
+                <li><span>Анестезия</span> <span>500 ₽</span></li>
+                <li><span>Световая пломба</span> <span>4 000 ₽</span></li>
+              </ul>
+            </details>
+
+            <details class="price-category">
+              <summary>Хирургия (Удаление)</summary>
+              <ul>
+                <li>
+                  <span>Удаление зуба (простое)</span> <span>2 500 ₽</span>
+                </li>
+                <li><span>Сложное удаление зуба</span> <span>4 000 ₽</span></li>
+                <li>
+                  <span>Удаление зуба «мудрости»</span> <span>от 6 000 ₽</span>
+                </li>
+                <li><span>Наложение швов</span> <span>1 000 ₽</span></li>
+              </ul>
+            </details>
+
+            <details class="price-category">
+              <summary>Имплантация и Гигиена</summary>
+              <ul>
+                <li>
+                  <span>Профессиональная гигиена (УЗ + AirFlow)</span>
+                  <span>4 500 ₽</span>
+                </li>
+                <li>
+                  <span>Имплантат NeoBiotech (Корея)</span>
+                  <span>35 000 ₽</span>
+                </li>
+                <li>
+                  <span>Имплантат Nobel Biocare (Швейцария)</span>
+                  <span>от 55 000 ₽</span>
+                </li>
+              </ul>
+            </details>
+
+            <details class="price-category">
+              <summary>Коронки и Брекеты</summary>
+              <ul>
+                <li>
+                  <span>Коронка из диоксида циркония</span>
+                  <span>22 000 ₽</span>
+                </li>
+                <li>
+                  <span>Металлокерамическая коронка</span> <span>9 000 ₽</span>
+                </li>
+                <li>
+                  <span>Брекет-система AzaDent</span> <span>180 000 ₽</span>
+                </li>
+                <li>
+                  <span>Система прозрачных элайнеров EuroKappa</span>
+                  <span>285 000 ₽</span>
+                </li>
+              </ul>
+            </details>
+          </div>
+        </div>
+        <div id="drawer-overlay" class="drawer-overlay"></div>
+      </div>
+    </section>
+
+    <section id="quiz-section" class="container">
+      <h2 class="section-title">Калькулятор стоимости</h2>
+      <div class="quiz-container">
+        <div class="quiz-step active" id="step-1">
+          <h3>Что вас беспокоит сейчас?</h3>
+          <div class="quiz-options">
+            <label>
+              <input
+                type="radio"
+                name="problem"
+                value="caries"
+                data-price="5500"
+              />
+              Просто темное пятно (зуб не болит)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="problem"
+                value="pulpitis"
+                data-price="11500"
+              />
+              Острая или ноющая боль (реагирует на горячее/холодное, больно
+              кусать)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="problem"
+                value="crown"
+                data-price="22000"
+              />
+              Зуб сильно разрушен, откололась большая часть (нужно восстановить)
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="problem"
+                value="hygiene"
+                data-price="4500"
+              />
+              Кровоточат десны, появился зубной камень или налет
+            </label>
+          </div>
+          <button class="btn" onclick="nextStep(2)">Далее</button>
+        </div>
+
+        <div class="quiz-step" id="step-2">
+          <h3>Нужен ли вам панорамный 3D-снимок (КТ)?</h3>
+          <p style="color: gray; font-size: 0.9rem; margin-top: -10px">
+            Для точного диагноза при лечении каналов или восстановлении зуба
+            врач делает компьютерную томографию.
+          </p>
+          <div class="quiz-options">
+            <label
+              ><input
+                type="radio"
+                name="material"
+                value="yes_kt"
+                data-price="1500"
+              />
+              Да, добавить КТ обеих челюстей (+1 500 ₽)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="material"
+                value="no_kt"
+                data-price="0"
+                checked
+              />
+              Нет, сделаем только обычный снимок 1 зуба (уже включен)</label
+            >
+          </div>
+          <div class="quiz-btns">
+            <button class="btn btn-outline" onclick="nextStep(1)">Назад</button>
+            <button class="btn" onclick="calculateResult()">
+              Рассчитать стоимость
+            </button>
+          </div>
+        </div>
+
+        <div class="quiz-step" id="step-3">
+          <h3>Предварительный расчет готов</h3>
+          <p class="quiz-total">
+            Ориентировочная стоимость: <span id="calc-result">0</span> ₽
+          </p>
+          <p style="font-size: 0.9rem; color: gray">
+            *В сумму уже включены базовые расходы: анестезия, изоляция
+            коффердамом и работа врача. Точный план составит доктор на
+            консультации.
+          </p>
+
+          <div class="input-group" style="margin-top: 20px">
+            <a href="#appointment" class="btn">Записаться</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="appointment" class="form-section">
+      <div class="form-box glass fade-in">
+        <h2>Записаться на прием</h2>
+        <p>Мы перезвоним вам в течение 10 минут</p>
+        <div class="input-group">
+          <input type="text" id="name" placeholder="Ваше имя" />
+          <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" />
+        </div>
+        <button class="btn w-100" onclick="sendForm()">Отправить заявку</button>
+      </div>
+    </section>
+
+    <footer id="contacts">
+      <div class="container footer-content">
+        <div class="footer-info">
+          <div class="logo">Aza <span>Dent</span></div>
+          <p>г.Самара, ул. Ново-Вокзальный тупик 10, офис 6</p>
+          <p>+7 (999) 123-45-67</p>
+        </div>
+        <div class="footer-social">
+          <p>Ежедневно: 09:00 — 21:00</p>
+        </div>
+      </div>
+      <div class="copyright">
+        Aza Dent © 2026. Все права защищены.
+        <br />
+        <a href="admin.html" class="admin-link">Панель управления</a>
+      </div>
+    </footer>
+
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <h3>Заявка принята!</h3>
+        <p>Ожидайте звонка администратора.</p>
+        <button class="btn btn-sm" onclick="closePopup()">ОК</button>
+      </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="main.js"></script>
+  </body>
+</html>

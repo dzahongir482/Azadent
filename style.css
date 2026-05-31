@@ -1,0 +1,595 @@
+:root {
+    --dark: #111111;
+    --primary: #1003c4;
+    --accent: #c8a96e;
+    --bg: #111111;
+    --white: #e4e4e4;
+    --text-on-dark: #0a0f1e;
+    /* УМЕНЬШИЛИ ПРОЗРАЧНОСТЬ: Сделали панель еще более прозрачной */
+    --glass: #ffffff; 
+}
+
+/* Применим ко всему сайту */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg); /* Используем темный фон */
+    color: var(--text-on-dark); /* Используем белый текст */
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* Typography */
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2; }
+h1 span { color: var(--accent); }
+.section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #c8a96e;  }
+
+/* Buttons */
+.btn {
+    background: var(--primary);
+    color: rgb(253, 253, 253);
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(87, 14, 182, 0.842);
+    text-align: center;
+}
+.btn:hover { transform: translateY(-3px); background: #11998e; }
+.btn-outline { background: transparent; border: 1px solid var(--white); box-shadow: none; }
+.btn-sm { padding: 10px 20px; font-size: 0.9rem; }
+.w-100 { width: 100%; }
+
+
+/* Header */
+header {
+    position: fixed; width: 100%; top: 0; z-index: 1000;
+    padding: 25px 0; /* Чуть увеличили отступ изначально */
+    transition: 0.4s;
+    color: var(--text-on-dark);
+}
+
+header.scrolled {
+    padding: 10px 0; /* КОЗЫРЕК МЕНЬШЕ: Значительно уменьшили отступ */
+    background: rgba(255, 255, 255, 0.08); /* Чуть темнее для контраста */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.nav-container { display: flex; justify-content: space-between; align-items: center; }
+
+/* ИСПРАВЛЕНИЕ: МЕНЮ ЛЕВЕЕ. Принудительно выравниваем элементы */
+.header-actions {
+    display: flex; gap: 25px; align-items: center;
+    justify-content: flex-end;
+}
+
+/* ЭФФЕКТ ДЛЯ ЛОГОТИПА: Сделали размытым за счет сильной тени */
+.logo {
+    font-size: 1.8rem; font-family: 'Playfair Display', serif; font-weight: 700;
+    color: var(--text-on-dark);
+    text-shadow: 0 0 10px var(--text-on-dark), 0 0 15px var(--text-on-dark);
+}
+
+header.scrolled .logo,
+header.scrolled #menu a {
+    color: var(--text-on-dark);
+}
+
+.logo span { color: var(--accent); }
+
+/* ЭФФЕКТ ДЛЯ ЗАГОЛОВКА ПЕРВОГО ЭКРАНА (на фото было видно тень) */
+.hero h1 {
+    font-size: 3.8rem; /* Чуть больше */
+    margin-bottom: 25px;
+    letter-spacing: 2px; /* Добавили расстояние */
+    text-shadow: 0 0 8px var(--text-on-dark);
+}
+
+/* ИСПРАВЛЕНИЕ: МЕНЮ ЛЕВЕЕ. Уменьшили расстояние между ссылками */
+#menu a {
+    color: var(--text-on-dark); text-decoration: none;
+    margin: 0 10px; font-weight: 500; transition: 0.3s;
+}
+
+#menu a:hover { color: var(--accent); }
+.nav-container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.8rem; font-family: 'Playfair Display'; font-weight: 700; color: var(--white); }
+header.scrolled .logo { color: var(--dark); }
+.logo span { color: var(--accent); }
+
+#menu a { color: var(--white); text-decoration: none; margin: 0 15px; font-weight: 500; transition: 0.3s; }
+header.scrolled #menu a { color: var(--dark); }
+#menu a:hover { color: var(--accent); }
+
+/* Hero */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4)), 
+    url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1920&q=80') center/cover;
+    display: flex; align-items: center; color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Полупрозрачный фоновый текст "Aza Dent" (как на референсе) */
+.bg-logo-text-large {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-90%, -50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 10vw; /* Огромный размер */
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.116); /* Очень прозрачный белый */
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 1; /* Под основным текстом */
+    letter-spacing: 15px; /* Расстояние между буквами */
+}
+
+/* Hero Content wrapper */
+.hero-content {
+    position: relative;
+    z-index: 5;
+    padding: 0 40px; /* Отступы с боков */
+}
+
+/* Тот самый "Квадрат" с текстом на первом экране (Глассморфизм) */
+.hero .hero-glass-panel {
+    padding: 60px; /* Большие отступы внутри */
+    border-radius: 24px; /* Закругленные углы */
+    background: var(--glass); /* Используем нашу переменную прозрачности */
+    backdrop-filter: blur(15px); /* Размытие */
+    -webkit-backdrop-filter: blur(15px); /* Для WebKit */
+    border: 1px solid rgba(255, 255, 255, 0.034); /* Граница */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Тень */
+}
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4)), 
+    url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1920&q=80') center/cover;
+    display: flex; align-items: center; color: #ffffff;
+}
+
+/* Cards & Grid */
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: -60px; position: relative; z-index: 10; }
+.card {
+    padding: 40px;
+    border-radius: 20px; /* Сохраняем закругленные углы */
+    text-align: center;
+    /* Применяем глассморфизм */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Тень */
+}
+.card .icon { font-size: 2rem; margin-bottom: 15px; display: block; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.service-card { background: var(--white); padding: 40px; border-radius: 20px; border-bottom: 4px solid transparent; transition: 0.3s; }
+.service-card:hover { border-bottom-color: var(--accent); transform: translateY(-5px); }
+
+/* Glassmorphism */
+.glass {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.877);
+    border-radius: 24px;
+}
+
+/* Prices */
+.price-wrapper { background-color: #111111; max-width: 800px; margin: 0 auto; padding: 40px; }
+.price-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px dashed rgba(15, 23, 42, 0.1); }
+.price-item span:last-child { font-weight: 700; color: var(--primary); }
+
+/* Form */
+.form-section { padding: 100px 0; background: #eef2f6; display: flex; justify-content: center; }
+.form-box { max-width: 600px; width: 90%; padding: 50px; text-align: center; }
+.input-group { margin: 30px 0; display: flex; flex-direction: column; gap: 15px; }
+input { padding: 15px 20px; border-radius: 50px; border: 1px solid #ddd; outline: none; transition: 0.3s; }
+input:focus { border-color: var(--primary); }
+
+/* Footer */
+footer { background: var(--dark); color: white; padding: 80px 0 20px; }
+.footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
+.copyright { text-align: center; margin-top: 50px; font-size: 0.8rem; opacity: 0.6; }
+
+/* Animations */
+/* Основное состояние анимации */
+.fade-in { 
+    opacity: 0; 
+    transform: translateY(30px); 
+    transition: 0.8s ease-out; 
+}
+
+/* Класс, который добавляет JS */
+.fade-in.visible { 
+    opacity: 1; 
+    transform: translateY(0); 
+}
+
+/* ИСПРАВЛЕНИЕ: Делаем первый экран видимым сразу, если JS вдруг не сработал */
+/* Hero Content */
+.hero-content {
+    position: relative;
+    z-index: 5;
+    padding: 60px; /* Добавляем отступы */
+}
+
+/* Применяем глассморфизм к тексту первого экрана */
+.hero .fade-in {
+    padding: 40px; /* Отступы внутри панели */
+    border-radius: 24px; /* Закругленные углы */
+    background: rgba(255, 255, 255, 0.048); /* Прозрачный фон */
+    backdrop-filter: blur(15px); /* Размытие */
+    -webkit-backdrop-filter: blur(15px); /* Для WebKit */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Граница */
+    box-shadow: 0 8px 32px 0 rgba(255, 250, 250, 0.37); /* Тень */
+}
+
+/* Добавим z-index, чтобы текст точно был над фоном */
+.hero-content {
+    position: relative;
+    z-index: 5;
+}
+
+/* Popup */
+.popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; }
+.popup-content { background: white; padding: 40px; border-radius: 20px; text-align: center; }
+
+/* Mobile */
+@media (max-width: 768px) {
+    h1 { font-size: 2.2rem; }
+    #menu { display: none; }
+    #burger { display: block; width: 30px; height: 20px; cursor: pointer; position: relative; }
+    #burger span { display: block; height: 2px; width: 100%; background: white; position: absolute; top: 9px; }
+    header.scrolled #burger span { background: var(--dark); }
+}
+/* Стили для раздела врачей */
+#doctors {
+    background-color: #111111;
+    padding: 100px 0;
+}
+
+/* Контейнер и неоновое свечение */
+.card-container {
+    width: 300px;
+    height: 350px; /* Сделал чуть выше, чтобы фото врача смотрелось лучше */
+    position: relative;
+    border-radius: 10px;
+    margin: 20px auto; /* Чтобы карточки ровно стояли */
+}
+
+.card-container::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Блок с фотографией (вместо градиента и SVG) */
+.card .img-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: scale 0.6s, rotate 0.6s, filter 1s;
+}
+
+/* Стили для самого фото врача */
+.card .img-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Чтобы фото не сплющивало */
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+/* Блок с текстом, который появляется при наведении */
+.card .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    color: #e8e8e8;
+    padding: 20px 24px;
+    line-height: 1.5;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(50px);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+    background: rgba(0, 0, 0, 0.6); /* Темная пленка, чтобы текст читался на фоне фото */
+}
+
+.card .content .heading {
+  font-size: 26px; /* Чуть уменьшил под длинные имена */
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Стили для специализации и стажа */
+.card .content .spec {
+    color: #00dbde;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.card .content .exp {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+/* Эффекты при наведении (Анимация из твоего кода) */
+.card:hover .content {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.card:hover .img-content {
+    scale: 2.5;
+    rotate: 30deg;
+    filter: blur(7px);
+}
+
+/* Кнопка записи */
+.btn-text {
+    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: 0.3s;
+    text-align: center;
+    width: fit-content;
+}
+
+.btn-text:hover {
+    transform: scale(1.05);
+}
+
+.doctor-spec {
+    color: var(--primary); /* Бирюзовый акцент на должности */
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.doctor-exp {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: #bd1010;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid transparent;
+    transition: 0.3s;
+}
+
+.btn-text:hover {
+    border-bottom-color: red;
+}
+.copyright {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 14px;
+    color: #64748b; /* Спокойный серый цвет */
+}
+
+.admin-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10px; /* Тот самый мелкий шрифт */
+    color: rgba(100, 116, 139, 0.5); /* Еще более прозрачный, чем основной текст */
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+    color: var(--primary); /* Станет ярче при наведении */
+    text-decoration: underline;
+}
+/* --- Новая интерактивная карта --- */
+.map-wrapper {
+    display: flex; 
+    gap: 40px; 
+    align-items: center; 
+    justify-content: center;
+    flex-wrap: wrap; 
+    margin-top: 30px;
+}
+.dental-svg-wrapper {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 450px;
+}
+.dental-svg {
+    width: 100%;
+    height: auto;
+}
+/* Стили элементов схемы */
+.tooth-group circle {
+    fill: #ffffff;
+    stroke: var(--primary);
+    stroke-width: 3;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.tooth-group:hover circle,
+.tooth-group.active circle {
+    fill: var(--accent);
+    stroke: #ffffff;
+    filter: drop-shadow(0 0 6px var(--accent));
+}
+.svg-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    fill: var(--dark);
+    pointer-events: none;
+}
+.zone-details {
+    background: white; 
+    padding: 40px;
+    border-radius: 20px; 
+    min-width: 320px;
+    max-width: 500px;
+    flex: 1;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+    border-left: 6px solid var(--accent);
+}
+.services-list { list-style: none; padding: 0; margin-top: 20px; }
+.services-list li {
+    display: flex; justify-content: space-between; gap: 15px;
+    padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-weight: 500;
+}
+
+/* --- Исправление отображения Квиза --- */
+.quiz-container {
+    max-width: 600px; margin: 40px auto; padding: 40px;
+    background: white; border-radius: 20px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+}
+.quiz-step { 
+    display: none !important; /* Принудительно прячем шаги */
+}
+.quiz-step.active { 
+    display: block !important; /* Показываем только активный */
+    animation: quizFadeIn 0.4s ease; 
+}
+.quiz-options { display: flex; flex-direction: column; gap: 15px; margin: 25px 0; }
+.quiz-options label {
+    padding: 15px 20px; border: 2px solid #e2e8f0; border-radius: 12px;
+    cursor: pointer; transition: 0.3s; font-weight: 500; display: flex; align-items: center;
+}
+.quiz-options label:hover { border-color: var(--accent); background: rgba(201,169,110,0.05); }
+.quiz-options input { margin-right: 12px; accent-color: var(--primary); }
+.quiz-btns { display: flex; gap: 15px; margin-top: 20px; }
+.quiz-total { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin: 15px 0; }
+
+@keyframes quizFadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* --- Выезжающая панель Прайса --- */
+.price-action-btn {
+    background: #0f766e; /* Выделяющийся цвет */
+    font-size: 1.1rem;
+    padding: 18px 40px;
+    animation: pulse-btn 2s infinite; /* Привлекает внимание */
+}
+.price-action-btn.hide-mode {
+    background: #475569; /* Цвет меняется, когда открыто */
+    animation: none;
+}
+
+@keyframes pulse-btn {
+    0% { box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(15, 118, 110, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+}
+
+/* Сама шторка */
+.price-drawer {
+    position: fixed; top: 0; right: -100%; /* Изначально спрятана за правым краем */
+    width: 50vw; /* Половина экрана на ПК */
+    height: 100vh;
+    background: #c8a96e;
+    z-index: 3000;
+    overflow-y: auto;
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: -10px 0 30px #008060;
+    display: flex; flex-direction: column;
+}
+.price-drawer.open { right: 0; } /* Класс для открытия */
+
+.drawer-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 30px 40px; background: #c8a96e;
+    border-bottom: 1px solid #f50101; position: sticky; top: 0; z-index: 10;
+}
+.drawer-header h2 { margin: 0; font-size: 1.8rem; }
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; }
+
+.drawer-content { padding: 40px; }
+
+/* Дизайн "Гармошки" для прайса */
+.price-category {
+    background: #1b4332; border: 1px solid #006efd;
+    border-radius: 12px; margin-bottom: 15px; overflow: hidden;
+}
+.price-category summary {
+    padding: 20px; font-weight: 600; font-size: 1.1rem;
+    cursor: pointer; list-style: none; display: flex; justify-content: space-between;
+}
+.price-category summary::after { content: '+'; color: var(--primary); font-size: 1.5rem; }
+.price-category[open] summary::after { content: '−'; color: #bd1010;}
+.price-category ul { padding: 0 20px 20px; list-style: none; margin: 0; color: #0a0f1e;}
+.price-category li {
+    display: flex; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px dashed #fffafa; font-size: 0.95rem;
+}
+
+/* Темный фон позади панели */
+.drawer-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 2999;
+    opacity: 0; pointer-events: none; transition: 0.4s;
+    backdrop-filter: blur(3px);
+}
+.drawer-overlay.show { opacity: 1; pointer-events: all; }
+
+/* Мобильная версия: Прайс на весь экран */
+@media (max-width: 768px) {
+    .price-drawer { width: 100vw; }
+    .drawer-header { padding: 20px; }
+    .drawer-content { padding: 20px; }
+}
