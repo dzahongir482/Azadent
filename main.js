@@ -189,7 +189,7 @@ const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
 const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; 
 
 // Создаем клиент через глобальный объект окна
-export const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 console.log("Supabase успешно инициализирован!");
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
