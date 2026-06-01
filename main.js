@@ -183,9 +183,9 @@ if (overlay) overlay.addEventListener('click', toggleDrawer);
 
 // Безопасное получение ключей для любого способа сборки
 const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
-const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; 
+const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; // Твой новый скопированный ключ
 
-// Создаем клиент через глобальный объект окна
+// Инициализируем напрямую
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 console.log("Supabase успешно инициализирован!");
