@@ -1,4 +1,3 @@
-
 // 1. Sticky Header + Изменение цвета при скролле
 window.addEventListener('scroll', () => {
     const header = document.getElementById('header');
