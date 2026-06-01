@@ -216,8 +216,8 @@ if (loginForm) {
         e.preventDefault(); // Запрещаем странице перезагружаться при отправке
         
         // Достаем то, что юзер ввел в инпуты прямо сейчас
-        const emailInput = document.querySelector('input[type="email"]')?.value || '';
-        const passwordInput = document.querySelector('input[type="password"]')?.value || '';
+        const emailInput = document.querySelector('input[type="admin-email"]')?.value || '';
+        const passwordInput = document.querySelector('input[type="admin-password"]')?.value || '';
         
         if (!emailInput || !passwordInput) {
             alert('Пожалуйста, заполните все поля!');
