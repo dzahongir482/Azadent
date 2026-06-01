@@ -194,8 +194,8 @@ console.log("Supabase успешно инициализирован!");
 // 1. Создаем функцию для входа
 async function loginAdmin(email, password) {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password,
+        email: 'dzahongir482@gmail.com',
+        password:'1122334444',
     });
 
     if (error) {
