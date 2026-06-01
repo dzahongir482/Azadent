@@ -182,21 +182,16 @@ if (closeBtn) closeBtn.addEventListener('click', toggleDrawer);
 if (overlay) overlay.addEventListener('click', toggleDrawer);
 
 
-// 8. Защищенный блок Администратора 
+// // 8. Защищенный блок Администратора
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Безопасное получение ключей для любого способа сборки
+const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
+const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; 
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("Ошибка: Ключи Supabase не найдены в переменных окружения!")
-}
+// Создаем клиент через глобальный объект окна
+export const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-// Создаем клиент, используя глобальный объект window.supabase.createClient
-export const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey)
-
-// --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
-// (Дальше идет твоя функция async function loginAdmin... её код оставляй как есть)
-
+console.log("Supabase успешно инициализирован!");
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
 
 // 1. Создаем функцию для входа
