@@ -183,18 +183,19 @@ if (overlay) overlay.addEventListener('click', toggleDrawer);
 
 
 // 8. Защищенный блок Администратора 
-import { createClient } from '@supabase/supabase-js'
 
-// Теперь это точно сработает:
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Добавим проверку, чтобы код не ломался, если ключ вдруг не найден
 if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Ошибка: Ключи Supabase не найдены в переменных окружения!")
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Создаем клиент, используя глобальный объект window.supabase.createClient
+export const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey)
+
+// --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
+// (Дальше идет твоя функция async function loginAdmin... её код оставляй как есть)
 
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
 
