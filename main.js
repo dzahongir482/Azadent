@@ -186,17 +186,17 @@ const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
 const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; 
 
 // Создаем клиент через глобальный объект окна
-const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 console.log("Supabase успешно инициализирован!");
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
 
 // 1. Создаем функцию для входа
 async function loginAdmin(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email,
         password: password,
-    })
+    });
 
     if (error) {
         console.error('Ошибка входа:', error.message)
