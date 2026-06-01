@@ -213,18 +213,21 @@ async function loginAdmin(email, password) {
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Запрещаем странице перезагружаться при отправке
+        e.preventDefault(); // Запрещаем перезагрузку страницы
         
-        // Достаем то, что юзер ввел в инпуты прямо сейчас
-        const emailInput = document.querySelector('input[type="admin-email"]')?.value || '';
-        const passwordInput = document.querySelector('input[type="admin-password"]')?.value || '';
+        // Находим инпуты строго по их ID из HTML
+        const emailInput = document.getElementById('admin-email')?.value || '';
+        // Проверь, какой id у пароля в admin.html (например, admin-password)
+        const passwordInput = document.getElementById('admin-password')?.value || ''; 
         
         if (!emailInput || !passwordInput) {
             alert('Пожалуйста, заполните все поля!');
             return;
         }
         
-        // Вызываем нашу функцию входа с живыми данными
+        console.log('Попытка входа для:', emailInput);
+        
+        // Вызываем функцию входа с точными живыми данными
         await loginAdmin(emailInput, passwordInput);
     });
 }
