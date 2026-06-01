@@ -190,34 +190,41 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey
 
 console.log("Supabase успешно инициализирован!");
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
-
-// 1. Создаем функцию для входа
+// 1. Создаем функцию для входа (теперь она правильно берет аргументы)
 async function loginAdmin(email, password) {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: 'dzahongir482@gmail.com',
-        password:'1122334444',
+        email: email, 
+        password: password
     });
 
     if (error) {
-        console.error('Ошибка входа:', error.message)
-        alert('Ошибка: ' + error.message)
-        return null
+        console.error('Ошибка входа:', error.message);
+        alert('Ошибка: ' + error.message);
+        return null;
     }
 
-    console.log('Успешный вход!', data)
-    return data
+    console.log('Успешный вход!', data);
+    alert('Вы успешно вошли в систему!');
+    
+    return data;
 }
 
 // 2. Привязываем эту функцию к форме в админке
-const loginForm = document.getElementById('login-form')
+const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault() // Отменяем перезагрузку страницы
-
-        const email = document.getElementById('admin-email').value
-        const password = document.getElementById('admin-password').value
-
-        // Теперь вызываем нашу асинхронную функцию
-        await loginAdmin(email, password)
-    })
+        e.preventDefault(); // Запрещаем странице перезагружаться при отправке
+        
+        // Достаем то, что юзер ввел в инпуты прямо сейчас
+        const emailInput = document.querySelector('input[type="email"]')?.value || '';
+        const passwordInput = document.querySelector('input[type="password"]')?.value || '';
+        
+        if (!emailInput || !passwordInput) {
+            alert('Пожалуйста, заполните все поля!');
+            return;
+        }
+        
+        // Вызываем нашу функцию входа с живыми данными
+        await loginAdmin(emailInput, passwordInput);
+    });
 }
