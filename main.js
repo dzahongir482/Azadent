@@ -1,4 +1,4 @@
-// 1. Sticky Header + Изменение цвета при скролле
+// Sticky Header + Изменение цвета при скролле
 window.addEventListener('scroll', () => {
     const header = document.getElementById('header');
     if (header) {
@@ -10,7 +10,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// 2. Анимация появления блоков (Fade In)
+// Анимация появления блоков (Fade In)
 const observerOptions = { threshold: 0.1 };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -22,7 +22,7 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-// 3. Плавный скролл по якорям
+// Плавный скролл по якорям
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -33,28 +33,89 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// 4. Функция отправки заявки на сервер Beget
-async function sendLead(name, phone) {
-    try {
-        const response = await fetch('save_lead.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, phone: phone }),
-        });
+// 2. ИНИЦИАЛИЗАЦИЯ SUPABASE
+const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybHNtb3VtbGdrcWp3anFybHNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDk2MjgsImV4cCI6MjA5NTgyNTYyOH0.sGH6AQng3_e7fzgVTYcP3Ya_mgXrvJuNCzksPAYxU9Q';
 
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            const popup = document.getElementById('popup');
-            if (popup) popup.style.display = 'flex';
-        } else {
-            console.error('Ошибка базы данных:', result.message);
-            alert('Что-то пошло не так при отправке.');
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+        persistSession: true,
+        autoRefreshToken: true
+    },
+    global: {
+        headers: {
+            'apikey': supabaseAnonKey,
+            'Authorization': `Bearer ${supabaseAnonKey}`
         }
+    }
+});
+
+console.log("Supabase успешно инициализирован!");
+
+// 3. ОТПРАВКА ЗАЯВОК В БАЗУ ДАННЫХ (ОБЩАЯ ФУНКЦИЯ)
+
+// Универсальная функция для добавления записи в Supabase с проверкой дубликатов
+async function insertAppointment(nameData, phoneData) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('AzaDent')
+            .insert([
+                { 
+                    name: nameData, 
+                    phoneNumber: phoneData 
+                }
+            ]);
+
+        // Если база вернула ошибку
+        if (error) {
+            // Проверяем, содержит ли код или текст ошибки намек на дубликат (код 23505 или текст duplicate)
+            if (error.code === '23505' || error.message.toLowerCase().includes('duplicate')) {
+                alert('Ваша заявка уже принята! Мы уже обрабатываем её и перезвоним вам в течение 10 минут.');
+                return { success: false, isDuplicate: true };
+            }
+            throw error; // Если ошибка какая-то другая, пробрасываем её дальше
+        }
+        
+        return { success: true };
     } catch (error) {
-        console.error('Ошибка соединения:', error);
+        console.error('Ошибка Supabase:', error.message);
+        return { success: false, error: error.message };
     }
 }
+
+// Отправка обычной формы "Записаться на прием"
+// Отправка обычной формы "Записаться на прием"
+async function sendForm() {
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+
+    if (!nameInput || !phoneInput) return;
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+
+    if (!name || !phone) {
+        alert('Пожалуйста, заполните ваше имя и номер телефона!');
+        return;
+    }
+
+    const result = await insertAppointment(name, phone);
+
+    if (result.success) {
+        // Показываем попап успеха ТОЛЬКО если это новая уникальная заявка
+        const popup = document.getElementById('popup');
+        if (popup) popup.style.display = 'flex';
+    } else if (result.isDuplicate) {
+        // Если это дубликат, мы уже показали alert внутри insertAppointment, 
+        // просто очищаем поля формы для порядка
+        nameInput.value = '';
+        phoneInput.value = '';
+    } else {
+        // Если произошла какая-то другая неизвестная ошибка
+        alert('Не удалось отправить заявку: ' + result.error);
+    }
+}
+window.sendForm = sendForm;
 
 // Закрытие попапа успешной отправки
 function closePopup() {
@@ -64,8 +125,9 @@ function closePopup() {
     if (document.getElementById('name')) document.getElementById('name').value = '';
     if (document.getElementById('phone')) document.getElementById('phone').value = '';
 }
+window.closePopup = closePopup;
 
-// 5. Интерактивная SVG-карта зубов
+// Интерактивная SVG-карта зубов
 const dentalZones = {
     front: {
         title: "Зона улыбки (Передние зубы)",
@@ -113,12 +175,13 @@ document.querySelectorAll('.tooth-group').forEach(group => {
     });
 });
 
-// 6. Пошаговый Квиз (Калькулятор стоимости)
+// Пошаговый Квиз (Калькулятор стоимости)
 function nextStep(stepNumber) {
     document.querySelectorAll('.quiz-step').forEach(step => step.classList.remove('active'));
     const nextStepEl = document.getElementById(`step-${stepNumber}`);
     if (nextStepEl) nextStepEl.classList.add('active');
 }
+window.nextStep = nextStep;
 
 function calculateResult() {
     const problem = document.querySelector('input[name="problem"]:checked');
@@ -136,8 +199,10 @@ function calculateResult() {
     }
     nextStep(3);
 }
+window.calculateResult = calculateResult;
 
-function sendQuizLead() {
+// Отправка заявки из Квиза
+async function sendQuizLead() {
     const phoneEl = document.getElementById('quiz-phone');
     const resultEl = document.getElementById('calc-result');
     
@@ -148,12 +213,20 @@ function sendQuizLead() {
     
     const phone = phoneEl.value;
     const totalCost = resultEl ? resultEl.innerText : "не определена";
+    const quizName = `Квиз (Расчет: ${totalCost} ₽)`;
     
-    // Передаем в качестве имени детализацию расчета, чтобы ты видел её в админке
-    sendLead(`Квиз (Расчет: ${totalCost} ₽)`, phone);
-}
+    const result = await insertAppointment(quizName, phone);
 
-// 7. Выезжающий прайс-лист (Шторка / Drawer)
+    if (result.success) {
+        alert('Расчет успешно отправлен! Наш врач свяжется с вами.');
+        phoneEl.value = '';
+    } else {
+        alert('Ошибка при отправке квиза: ' + result.error);
+    }
+}
+window.sendQuizLead = sendQuizLead;
+
+// Выезжающий прайс-лист (Шторка / Drawer)
 const priceBtn = document.getElementById('price-toggle-btn');
 const closeBtn = document.getElementById('close-drawer-btn');
 const drawer = document.getElementById('price-drawer');
@@ -178,25 +251,7 @@ if (priceBtn) priceBtn.addEventListener('click', toggleDrawer);
 if (closeBtn) closeBtn.addEventListener('click', toggleDrawer);
 if (overlay) overlay.addEventListener('click', toggleDrawer);
 
-
-const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybHNtb3VtbGdrcWp3anFybHNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDk2MjgsImV4cCI6MjA5NTgyNTYyOH0.sGH6AQng3_e7fzgVTYcP3Ya_mgXrvJuNCzksPAYxU9Q'; // Твой новый ключ из интеграции
-
-// Инициализируем клиент с принудительной передачей нового ключа в заголовки
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-        persistSession: true,
-        autoRefreshToken: true
-    },
-    global: {
-        headers: {
-            'apikey': supabaseAnonKey,
-            'Authorization': `Bearer ${supabaseAnonKey}`
-        }
-    }
-});
-
-console.log("Supabase успешно инициализирован с расширенными заголовками!");
+// Логика входа админа с безопасным переключением экранов
 async function loginAdmin(email, password) {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email, 
@@ -211,28 +266,25 @@ async function loginAdmin(email, password) {
 
     console.log('Успешный вход!', data);
     
-    // === ВОТ ЗДЕСЬ МАГИЯ ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ ===
     const loginScreen = document.getElementById('login-screen');
     const dashboard = document.getElementById('dashboard');
     
-    if (loginScreen && dashboard) {
-        loginScreen.style.display = 'none'; // Прячем форму входа
-        dashboard.style.display = 'block';  // Показываем таблицу с заявками!
-        
-        loadLeads(); 
-    }
+    // Безопасное переключение: меняем стили, только если элементы реально есть в HTML
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (dashboard) dashboard.style.display = 'block';
+    
+    // Сразу же запускаем загрузку данных из таблицы AzaDent
+    loadLeads(); 
     
     return data;
 }
-// 2. Привязываем эту функцию к форме в админке
+
+// Привязка события к форме входа
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Запрещаем перезагрузку страницы
-        
-        // Находим инпуты строго по их ID из HTML
+        e.preventDefault();
         const emailInput = document.getElementById('admin-email')?.value || '';
-        // Проверь, какой id у пароля в admin.html (например, admin-password)
         const passwordInput = document.getElementById('admin-password')?.value || ''; 
         
         if (!emailInput || !passwordInput) {
@@ -241,11 +293,10 @@ if (loginForm) {
         }
         
         console.log('Попытка входа для:', emailInput);
-        
-        // Вызываем функцию входа с точными живыми данными
         await loginAdmin(emailInput, passwordInput);
     });
 }
+
 // Функция выхода из системы
 async function logout() {
     const { error } = await supabaseClient.auth.signOut();
@@ -254,34 +305,201 @@ async function logout() {
         return;
     }
     
-    // Переключаем экраны обратно
     const loginScreen = document.getElementById('login-screen');
     const dashboard = document.getElementById('dashboard');
     
     if (loginScreen && dashboard) {
-        dashboard.style.display = 'none';  // Прячем дашборд
-        loginScreen.style.display = 'block'; // Показываем форму ввода
+        dashboard.style.display = 'none';
+        loginScreen.style.display = 'block';
         
-        // Чистим поля формы, чтобы данные не оставались
-        document.getElementById('admin-email').value = '';
-        document.getElementById('admin-password').value = '';
+        if (document.getElementById('admin-email')) document.getElementById('admin-email').value = '';
+        if (document.getElementById('admin-password')) document.getElementById('admin-password').value = '';
     }
     console.log('Вы успешно вышли из системы');
 }
-// Делаем функцию доступной глобально для HTML-кнопки
 window.logout = logout;
 
-// Логика показа/скрытия пароля
+// Логика переключения глазка пароля
 const togglePasswordBtn = document.getElementById('toggle-password');
-const passwordInput = document.getElementById('admin-password');
+const passwordField = document.getElementById('admin-password');
 
-if (togglePasswordBtn && passwordInput) {
+if (togglePasswordBtn && passwordField) {
     togglePasswordBtn.addEventListener('click', function () {
-        // Если тип сейчас password — меняем на text, и наоборот
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        
-        // Визуально подсвечиваем или тушим глазок при нажатии
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
         this.classList.toggle('active');
     });
 }
+
+// Загрузка сохраненных заявок в админку (версия без колонки Действие)
+async function loadLeads() {
+    const leadsBody = document.getElementById('leads-body');
+    if (!leadsBody) return;
+
+    // Показываем временный текст, пока данные грузятся
+    leadsBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Загрузка данных...</td></tr>';
+
+    // Запрашиваем данные из правильной таблицы AzaDent
+    const { data: leads, error } = await supabaseClient
+        .from('AzaDent') 
+        .select('*')
+        .order('created_at', { ascending: false }); // Сначала новые заявки
+
+    if (error) {
+        console.error('Ошибка загрузки заявок:', error.message);
+        leadsBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: #991b1b;">Ошибка: ${error.message}</td></tr>`;
+        return;
+    }
+
+    // Если в базе данных вообще нет строк
+    if (!leads || leads.length === 0) {
+        leadsBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: #6b7280;">Новых заявок пока нет</td></tr>';
+        return;
+    }
+
+    // Очищаем таблицу перед выводом новых данных
+    leadsBody.innerHTML = '';
+    
+    // Перебираем каждую заявку и создаем строку таблицы (ровно 3 колонки: Имя, Телефон, Статус)
+    leads.forEach(lead => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${lead.name || 'Не указано'}</strong></td>
+            <td>${lead.phoneNumber || 'Не указано'}</td>
+            <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 4px 8px; border-radius: 4px; font-size: 12px;">Новая</span></td>
+        `;
+        leadsBody.appendChild(row);
+    });
+}
+window.loadLeads = loadLeads;
+
+// Автоматическая проверка при загрузке страницы admin.html
+document.addEventListener('DOMContentLoaded', async () => {
+    // Проверяем, находимся ли мы вообще на странице админки (есть ли там таблица)
+    const leadsBody = document.getElementById('leads-body');
+    if (!leadsBody) return; // Если это обычный индексный сайт, ничего не делаем
+
+    console.log("Админка загружена, проверяем авторизацию...");
+
+    // Спрашиваем у Supabase, залогинен ли админ прямо сейчас
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (session) {
+        console.log("Админ уже авторизован, принудительно загружаем заявки!");
+        
+        // На всякий случай переключаем экраны, если они есть
+        const loginScreen = document.getElementById('login-screen');
+        const dashboard = document.getElementById('dashboard');
+        if (loginScreen) loginScreen.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'block';
+
+        // Вызываем загрузку
+        loadLeads();
+    } else {
+        console.log("Админ не авторизован, показываем форму входа.");
+    }
+});
+
+// Функция для загрузки одного файла в бакет AzaDent_images------------------------------------------------------------------------------------------------------
+// Вспомогательная функция отправки файла в бакет AzaDent_images
+async function uploadToSupabaseStorage(file, folder) {
+    if (!file) return null;
+    const fileExt = file.name.split('.').pop();
+    // Генерируем уникальное имя файла, чтобы ничего не перезаписать случайно
+    const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+    const { data, error } = await supabaseClient.storage
+        .from('AzaDent_images')
+        .upload(fileName, file);
+
+    if (error) {
+        console.error('Ошибка при загрузке картинки в Storage:', error.message);
+        return null;
+    }
+
+    // Получаем прямую публичную ссылку на картинку
+    const { data: { publicUrl } } = supabaseClient.storage
+        .from('AzaDent_images')
+        .getPublicUrl(fileName);
+
+    return publicUrl;
+}
+
+// 1. Функция отправки кейса До/После за выбранного врача
+async function handlePortfolioUpload() {
+    const doctorId = document.getElementById('adm-portfolio-doctor').value;
+    const description = document.getElementById('adm-work-desc').value.trim();
+    const fileBefore = document.getElementById('adm-photo-before').files[0];
+    const fileAfter = document.getElementById('adm-photo-after').files[0];
+
+    if (!description || !fileBefore || !fileAfter) {
+        alert('Пожалуйста, заполните описание и выберите обе фотографии (До и После)!');
+        return;
+    }
+
+    // Загружаем файлы в папочку 'portfolio' внутри бакета
+    const urlBefore = await uploadToSupabaseStorage(fileBefore, 'portfolio');
+    const urlAfter = await uploadToSupabaseStorage(fileAfter, 'portfolio');
+
+    if (!urlBefore || !urlAfter) {
+        alert('Не удалось загрузить изображения.');
+        return;
+    }
+
+    // Записываем данные в таблицу portfolio
+    const { error } = await supabaseClient
+        .from('portfolio')
+        .insert([{ 
+            doctor_id: doctorId, 
+            description: description, 
+            image_before_url: urlBefore, 
+            image_after_url: urlAfter 
+        }]);
+
+    if (error) {
+        alert('Ошибка при сохранении в базу: ' + error.message);
+    } else {
+        alert('Кейс «До/После» успешно опубликован!');
+        document.getElementById('portfolio-upload-form').reset();
+    }
+}
+
+// 2. Функция отправки отзыва за выбранного врача
+async function handleReviewUpload() {
+    const doctorId = document.getElementById('adm-review-doctor').value;
+    const authorName = document.getElementById('adm-review-author').value.trim();
+    const reviewText = document.getElementById('adm-review-text').value.trim();
+    const fileReview = document.getElementById('adm-photo-review').files[0];
+
+    if (!authorName) {
+        alert('Пожалуйста, введите имя пациента!');
+        return;
+    }
+
+    let urlReview = null;
+    if (fileReview) {
+        urlReview = await uploadToSupabaseStorage(fileReview, 'reviews');
+    }
+
+    // Записываем данные в таблицу reviews
+    const { error } = await supabaseClient
+        .from('reviews')
+        .insert([{ 
+            doctor_id: doctorId, 
+            author_name: authorName, 
+            review_text: reviewText || null, 
+            review_image_url: urlReview 
+        }]);
+
+    if (error) {
+        alert('Ошибка при сохранении отзыва: ' + error.message);
+    } else {
+        alert('Отзыв успешно опубликован!');
+        document.getElementById('review-upload-form').reset();
+    }
+}
+
+// Делаем функции глобальными, чтобы атрибуты onclick="..." их видели
+window.handlePortfolioUpload = handlePortfolioUpload;
+window.handleReviewUpload = handleReviewUpload;
+//---------------------------------------------------------------------------------------------------------------------------------------------------------

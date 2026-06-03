@@ -11,7 +11,7 @@
     <div id="admin-app">
         <section id="login-screen">
             <form class="form" id="login-form">
-                <p id="heading">Админ-панель Aza Dent</p>
+                <h1 id="heading">Админ-панель Aza Dent</h1>
                 
                 <div class="field">
                     <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -57,6 +57,77 @@
             </table>
         </section>
     </div>
+    <!-- УПРАВЛЕНИЕ ПОРТФОЛИО И ОТЗЫВАМИ ВРАЧЕЙ -->
+<div id="content-management-section" style="margin-top: 50px; padding-top: 30px; border-top: 2px solid rgba(255,255,255,0.1); color: #fff; font-family: 'Inter', sans-serif;">
+    
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 25px; color: #10b981;">Добавление материалов на сайт</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        
+        <!-- Форма 1: Кейсы ДО / ПОСЛЕ -->
+        <form id="portfolio-upload-form" style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <h3 style="margin-top:0; margin-bottom: 20px; color: #e2e8f0;">1. Загрузить работу (До/После)</h3>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.9rem;">Выберите врача:</label>
+                <select id="adm-portfolio-doctor" style="width: 100%; padding: 10px; border-radius: 6px; background: #1b263b; color: #fff; border: 1px solid #415a77; font-size: 0.95rem;">
+                    <option value="askar">Аскар Зафарович</option>
+                    <option value="ivanov">Иван Иванов</option>
+                    <option value="petrov">Петр Петров</option>
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.9rem;">Описание клинического случая:</label>
+                <textarea id="adm-work-desc" placeholder="Исправление скученности зубов на брекет-системе. Срок лечения — 1.5 года." style="width: 100%; padding: 10px; border-radius: 6px; background: #1b263b; color: #fff; border: 1px solid #415a77; min-height: 80px; font-family: inherit; box-sizing: border-box; font-size: 0.95rem;"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.85rem;">Фото ДО:</label>
+                    <input type="file" id="adm-photo-before" accept="image/*" style="width: 100%; color: #cbd5e1; font-size: 0.85rem;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.85rem;">Фото ПОСЛЕ:</label>
+                    <input type="file" id="adm-photo-after" accept="image/*" style="width: 100%; color: #cbd5e1; font-size: 0.85rem;">
+                </div>
+            </div>
+            
+            <button type="button" onclick="handlePortfolioUpload()" style="background: #10b981; color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 0.95rem; transition: 0.2s;">Опубликовать на страницу врача</button>
+        </form>
+
+        <!-- Форма 2: Отзывы пациентов -->
+        <form id="review-upload-form" style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <h3 style="margin-top:0; margin-bottom: 20px; color: #e2e8f0;">2. Загрузить отзыв</h3>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.9rem;">Выберите врача:</label>
+                <select id="adm-review-doctor" style="width: 100%; padding: 10px; border-radius: 6px; background: #1b263b; color: #fff; border: 1px solid #415a77; font-size: 0.95rem;">
+                    <option value="askar">Аскар Зафарович</option>
+                    <option value="ivanov">Иван Иванов</option>
+                    <option value="petrov">Петр Петров</option>
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.9rem;">Имя пациента:</label>
+                <input type="text" id="adm-review-author" placeholder="Екатерина П." style="width: 100%; padding: 10px; border-radius: 6px; background: #1b263b; color: #fff; border: 1px solid #415a77; box-sizing: border-box; font-size: 0.95rem;">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.9rem;">Текст отзыва (необязательно):</label>
+                <textarea id="adm-review-text" placeholder="Очень довольна результатом! Доктор очень внимательный..." style="width: 100%; padding: 10px; border-radius: 6px; background: #1b263b; color: #fff; border: 1px solid #415a77; min-height: 80px; font-family: inherit; box-sizing: border-box; font-size: 0.95rem;"></textarea>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.85rem;">Скриншот / Фото отзыва (если есть):</label>
+                <input type="file" id="adm-photo-review" accept="image/*" style="color: #cbd5e1; font-size: 0.85rem;">
+            </div>
+            
+            <button type="button" onclick="handleReviewUpload()" style="background: #10b981; color: #fff; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 0.95rem; transition: 0.2s;">Опубликовать отзыв</button>
+        </form>
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="main.js"></script>
 </body>

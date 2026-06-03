@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История лечения и отзывы | Aza Dent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #0d1b2a; color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 60px; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .back-link { color: #10b981; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 30px; transition: 0.2s; }
+        .back-link:hover { color: #059669; }
+        .portfolio-header { text-align: center; margin: 40px 0; }
+        .doctor-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin: 10px 0 0 0; }
+        .section-subtitle { border-bottom: 1px solid #415a77; padding-bottom: 10px; margin-top: 50px; font-family: 'Playfair Display', serif; color: #e2e8f0; }
+        
+        /* Сетка для До/После */
+        .cases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 25px; }
+        .case-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+        .before-after { display: flex; gap: 12px; margin-bottom: 15px; }
+        .before-after img { width: 50%; border-radius: 8px; object-fit: cover; height: 200px; border: 1px solid rgba(255,255,255,0.1); }
+        .case-desc { margin: 0; font-size: 0.95rem; color: #cbd5e1; line-height: 1.5; }
+        
+        /* Сетка для отзывов */
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 25px; }
+        .review-card { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+        .review-author { margin: 0 0 10px 0; color: #10b981; font-size: 1.2rem; font-weight: 600; }
+        .review-text { font-style: italic; color: #94a3b8; line-height: 1.6; margin: 0 0 15px 0; }
+        .review-img { width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+        
+        <div class="portfolio-header">
+            <p style="color: #10b981; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; margin: 0;">Архив выполненных работ</p>
+            <h1 id="doctor-name" class="doctor-title">Загрузка информации...</h1>
+        </div>
+
+        <!-- Блок КЕЙСОВ До/После -->
+        <h2 class="section-subtitle">Результаты «До / После»</h2>
+        <div id="portfolio-container" class="cases-grid"></div>
+
+        <!-- Блок ОТЗЫВОВ -->
+        <h2 class="section-subtitle">Отзывы пациентов</h2>
+        <div id="reviews-container" class="reviews-grid"></div>
+    </div>
+
+    <!-- Подключаем официальный клиент Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Вставь сюда данные своего проекта Supabase
+        const SUPABASE_URL = "ТВОЙ_SUPABASE_URL";
+        const SUPABASE_ANON_KEY = "ТВОЙ_ANON_KEY";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Соответствие ID из ссылки реальным именам врачей на странице
+        const doctorNames = {
+            'askar': 'Аскар Зафарович',
+            'ivanov': 'Иван Иванов',
+            'petrov': 'Петр Петров'
+        };
+
+        // Читаем параметр из ссылки (например: portfolio.html?doctor=askar)
+        const urlParams = new URLSearchParams(window.location.search);
+        const doctorId = urlParams.get('doctor') || 'askar'; 
+
+        // Меняем заголовок под конкретного врача
+        document.getElementById('doctor-name').innerText = doctorNames[doctorId] || 'Врач клиники Aza Dent';
+
+        async function fetchDoctorContent() {
+            const portfolioContainer = document.getElementById('portfolio-container');
+            const reviewsContainer = document.getElementById('reviews-container');
+            
+            portfolioContainer.innerHTML = '<p style="color: #64748b;">Загрузка портфолио...</p>';
+            reviewsContainer.innerHTML = '<p style="color: #64748b;">Загрузка отзывов...</p>';
+
+            // Запрашиваем из базы только записи, где doctor_id совпадает с текущим врачом
+            const { data: portfolioData } = await supabase.from('portfolio').select('*').eq('doctor_id', doctorId).order('created_at', { ascending: false });
+            const { data: reviewsData } = await supabase.from('reviews').select('*').eq('doctor_id', doctorId).order('created_at', { ascending: false });
+
+            // Выводим портфолио До/После
+            portfolioContainer.innerHTML = '';
+            if (portfolioData && portfolioData.length > 0) {
+                portfolioData.forEach(item => {
+                    portfolioContainer.innerHTML += `
+                        <div class="case-card">
+                            <div class="before-after">
+                                <img src="${item.image_before_url}" alt="До">
+                                <img src="${item.image_after_url}" alt="После">
+                            </div>
+                            <p class="case-desc">${item.description || 'Без описания'}</p>
+                        </div>
+                    `;
+                });
+            } else {
+                portfolioContainer.innerHTML = '<p style="color: #64748b;">Кейсы до/после для этого врача еще не загружены.</p>';
+            }
+
+            // Выводим отзывы
+            reviewsContainer.innerHTML = '';
+            if (reviewsData && reviewsData.length > 0) {
+                reviewsData.forEach(item => {
+                    reviewsContainer.innerHTML += `
+                        <div class="review-card">
+                            <h3 class="review-author">${item.author_name}</h3>
+                            ${item.review_text ? `<p class="review-text">"${item.review_text}"</p>` : ''}
+                            ${item.review_image_url ? `<img src="${item.review_image_url}" class="review-img" alt="Скриншот отзыва">` : ''}
+                        </div>
+                    `;
+                });
+            } else {
+                reviewsContainer.innerHTML = '<p style="color: #64748b;">Отзывы для этого врача пока отсутствуют.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchDoctorContent);
+    </script>
+</body>
+</html>

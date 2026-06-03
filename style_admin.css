@@ -12,7 +12,11 @@
     overflow: hidden;
     padding: 20px;
 }
-
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 /* Добавляем скрытые цветные сферы на задний план для глубины и эффекта свечения */
 #login-screen::before,
 #login-screen::after {
