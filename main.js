@@ -468,7 +468,6 @@ async function handlePortfolioUpload() {
 async function handleReviewUpload() {
     const doctorId = document.getElementById('adm-review-doctor').value;
     const authorName = document.getElementById('adm-review-author').value.trim();
-    const reviewText = document.getElementById('adm-review-text').value.trim();
     const fileReview = document.getElementById('adm-photo-review').files[0];
 
     if (!authorName) {
@@ -487,7 +486,6 @@ async function handleReviewUpload() {
         .insert([{ 
             doctor_id: doctorId, 
             author_name: authorName, 
-            review_text: reviewText || null, 
             review_image_url: urlReview 
         }]);
 
