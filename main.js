@@ -179,14 +179,14 @@ if (closeBtn) closeBtn.addEventListener('click', toggleDrawer);
 if (overlay) overlay.addEventListener('click', toggleDrawer);
 
 
-// // 8. Защищенный блок Администратора
-
-// Безопасное получение ключей для любого способа сборки
+// // 8. Защищенный跨лок Администратора
 const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
-const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; // Твой новый скопированный ключ
+const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; // Твой НОВЫЙ ключ, который сгенерировала интеграция
 
-// Инициализируем напрямую
+// Создаем клиент, используя глобальный объект окна
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+console.log("Supabase успешно инициализирован!");
 
 console.log("Supabase успешно инициализирован!");
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
