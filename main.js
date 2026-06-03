@@ -180,7 +180,7 @@ if (overlay) overlay.addEventListener('click', toggleDrawer);
 
 
 const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
-const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; // Твой новый ключ из интеграции
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybHNtb3VtbGdrcWp3anFybHNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDk2MjgsImV4cCI6MjA5NTgyNTYyOH0.sGH6AQng3_e7fzgVTYcP3Ya_mgXrvJuNCzksPAYxU9Q'; // Твой новый ключ из интеграции
 
 // Инициализируем клиент с принудительной передачей нового ключа в заголовки
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
