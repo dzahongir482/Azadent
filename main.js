@@ -179,16 +179,24 @@ if (closeBtn) closeBtn.addEventListener('click', toggleDrawer);
 if (overlay) overlay.addEventListener('click', toggleDrawer);
 
 
-// // 8. Защищенный跨лок Администратора
 const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
-const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; // Твой НОВЫЙ ключ, который сгенерировала интеграция
+const supabaseAnonKey = 'sb_publishable_KaWXXb56-wn3nHyZLLMDAg_Bh6Ys1X1'; // Твой новый ключ из интеграции
 
-// Создаем клиент, используя глобальный объект окна
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+// Инициализируем клиент с принудительной передачей нового ключа в заголовки
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+        persistSession: true,
+        autoRefreshToken: true
+    },
+    global: {
+        headers: {
+            'apikey': supabaseAnonKey,
+            'Authorization': `Bearer ${supabaseAnonKey}`
+        }
+    }
+});
 
-console.log("Supabase успешно инициализирован!");
-
-console.log("Supabase успешно инициализирован!");
+console.log("Supabase успешно инициализирован с расширенными заголовками!");
 // --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
 // 1. Создаем функцию для входа (теперь она правильно берет аргументы)
 async function loginAdmin(email, password) {
