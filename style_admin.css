@@ -1,217 +1,298 @@
-/* Основные настройки */
-:root {
-    --primary: #0f172a;
-    --accent: #c4a47c;
-    --success: #22c55e;
-    --danger: #ef4444;
-    --bg: #f8fafc;
-    --white: #ffffff;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
-    margin: 0;
-    color: var(--primary);
-}
-
-/* Экран входа */
+/* ==========================================================================
+   2. ЭКРАН ВХОДА (LOGIN SCREEN) — Живой неоновый градиент (Aurora)
+   ========================================================================== */
 #login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    width: 125vh;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(100deg, #1A0533 0%, #8B2e6e 0%, #FFb347 100%);
-}
-
-.login-card {
-    background: var(--white);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.login-card h2 { margin-bottom: 25px; }
-
-.login-card input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-
-.login-card button {
-    width: 100%;
-    padding: 12px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-/* Дашборд */
-#dashboard {
-    padding: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-/* Таблица заявок */
-.leads-table {
-    width: 100%;
-    background: var(--white);
-    border-collapse: collapse;
-    border-radius: 15px;
+    /* Разноцветный премиальный градиент с мягкими переливами */
+    background: linear-gradient(135deg, #0f1011 0%, #1e1b4b 30%, #311042 60%, #111827 100%);
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    padding: 20px;
 }
 
-.leads-table th {
-    background: #f1f5f9;
-    padding: 15px;
-    text-align: left;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: #64748b;
+/* Добавляем скрытые цветные сферы на задний план для глубины и эффекта свечения */
+#login-screen::before,
+#login-screen::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    z-index: 1;
+    pointer-events: none;
 }
 
-.leads-table td {
-    padding: 15px;
-    border-bottom: 1px solid #f1f5f9;
+/* Первое цветное пятно (мягкий фиолетово-синий) */
+#login-screen::before {
+    background: #4f46e5;
+    top: -10%;
+    left: 10%;
 }
 
-/* Статусы */
-.status-badge {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+/* Второе цветное пятно (глубокий изумрудный/аква) */
+#login-screen::after {
+    background: #0d9488;
+    bottom: -10%;
+    right: 10%;
 }
 
-.status-new { background: #fee2e2; color: var(--danger); }
-.status-booked { background: #dcfce7; color: var(--success); }
-
-/* Кнопки действий */
-.btn-action {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-.btn-logout {
-    background: transparent;
-    border: 1px solid var(--danger);
-    color: var(--danger);
-    padding: 8px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-body {
-    background-color: #000; /* Фон страницы под стать форме */
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-#login-screen {
-    display: flex;
-    justify-content: center;
-}
-
-/* Твои оригинальные стили формы */
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 2em;
-    background-color: #171717;
-    border-radius: 25px;
-    transition: .4s ease-in-out;
-    width: 320px;
-}
-
-.form:hover {
-    transform: scale(1.02);
-    border: 1px solid #c4a47c; /* Добавил золотистый акцент при наведении */
+    /* Поднимаем форму над цветными пятнами фона */
+    position: relative;
+    z-index: 2;
+    /* Ультра-прозрачное премиальное стекло (Glassmorphism) */
+    background: rgba(15, 16, 17, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    padding: 40px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 420px;
+    /* Мягкая глубокая тень, чтобы форма "парила" над разноцветным фоном */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 #heading {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
     text-align: center;
-    margin: 1.5em;
-    color: rgb(255, 255, 255);
-    font-size: 1.2em;
+    margin-bottom: 35px;
+    /* Легкое неоновое свечение для заголовка */
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
 }
 
 .field {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    border-radius: 25px;
-    padding: 0.6em;
-    border: none;
-    outline: none;
-    color: white;
-    background-color: #171717;
-    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+    position: relative;
+    margin-bottom: 20px;
 }
 
 .input-icon {
-    height: 1.3em;
-    width: 1.3em;
-    fill: #c4a47c; /* Иконки в цвет бренда */
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.35);
+    transition: color 0.3s ease;
 }
 
 .input-field {
-    background: none;
-    border: none;
-    outline: none;
+    box-sizing: border-box;
     width: 100%;
-    color: #d3d3d3;
+    padding: 16px 16px 16px 48px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 144px;
+    color: #ffffff;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.form .btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 1.5em;
+/* Эффект при клике на поле ввода на цветном фоне */
+.input-field:focus {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.02);
 }
 
+.input-field:focus + .input-icon {
+    color: #ffffff;
+}
+
+/* Кнопка входа */
 .button1 {
     width: 100%;
-    padding: 0.8em;
-    border-radius: 25px; /* Скруглил под стиль полей */
+    padding: 16px;
+    background-color: #ffffff;
+    color: #0f1011;
     border: none;
-    outline: none;
-    transition: .4s ease-in-out;
-    background-color: #252525;
-    color: white;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 10px;
 }
 
 .button1:hover {
-    background-color: #c4a47c;
-    color: black;
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3), 
+                0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.button1:active {
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   3. ПАНЕЛЬ УПРАВЛЕНИЯ (DASHBOARD) — Минималистичный дорогой светлый интерфейс
+   ========================================================================== */
+#dashboard {
+    width: 100%;
+    max-width: 1300px;
+    margin: 50px auto;
+    padding: 0 30px;
+}
+
+/* Шапка дашборда */
+#dashboard header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#dashboard h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #111827;
+}
+
+/* Кнопка Выйти */
+.btn-logout {
+    padding: 10px 20px;
+    background-color: transparent;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+    background-color: #fea3a3;
+    color: #991b1b;
+    border-color: #fca5a5;
+}
+
+
+/* ==========================================================================
+   4. ПРЕМИАЛЬНАЯ ТАБЛИЦА ЗАЯВОК
+   ========================================================================== */
+.leads-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.02), 0 100px 80px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.leads-table th {
+    background-color: #f9fafb;
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 18px 24px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.leads-table td {
+    padding: 20px 24px;
+    color: #1f2937;
+    font-size: 15px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+/* Убираем нижнюю границу у последней строки таблицы */
+.leads-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Эффект наведения на строку таблицы */
+.leads-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.leads-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Стилизация текста статуса (например: Новая, В работе) */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+/* Кнопки действий внутри таблицы */
+.action-btn {
+    padding: 8px 14px;
+    background-color: #111827;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: #1f2937;
+}
+/* Фикс белого фона при автозаполнении браузером */
+.input-field:-webkit-autofill,
+.input-field:-webkit-autofill:hover, 
+.input-field:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important; /* Оставляем текст белым */
+    transition: background-color 5000s ease-in-out 0s; /* Обманываем браузер, делая смену фона бесконечно долгой */
+    box-shadow: inset 0 0 0 50px rgba(255, 255, 255, 0.04) !important; /* Накладываем поверх наше прозрачное премиальное стекло */
+}
+/* Кнопка-глазок внутри поля ввода */
+.toggle-password-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+    z-index: 3;
+}
+
+.toggle-password-btn:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Когда пароль открыт — иконка светится ярче */
+.toggle-password-btn.active {
+    color: #ffffff;
+}
+
+/* Эффект нажатия */
+.toggle-password-btn:active {
+    transform: translateY(-50%) scale(0.9);
 }

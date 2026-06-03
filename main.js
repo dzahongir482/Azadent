@@ -197,8 +197,6 @@ const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey
 });
 
 console.log("Supabase успешно инициализирован с расширенными заголовками!");
-// --- ИСПРАВЛЕННЫЙ БЛОК АВТОРИЗАЦИИ ---
-// 1. Создаем функцию для входа (теперь она правильно берет аргументы)
 async function loginAdmin(email, password) {
     const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email, 
@@ -212,10 +210,20 @@ async function loginAdmin(email, password) {
     }
 
     console.log('Успешный вход!', data);
-    window.location.href = './admin.html';
+    
+    // === ВОТ ЗДЕСЬ МАГИЯ ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ ===
+    const loginScreen = document.getElementById('login-screen');
+    const dashboard = document.getElementById('dashboard');
+    
+    if (loginScreen && dashboard) {
+        loginScreen.style.display = 'none'; // Прячем форму входа
+        dashboard.style.display = 'block';  // Показываем таблицу с заявками!
+        
+        loadLeads(); 
+    }
+    
     return data;
 }
-
 // 2. Привязываем эту функцию к форме в админке
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
@@ -236,5 +244,44 @@ if (loginForm) {
         
         // Вызываем функцию входа с точными живыми данными
         await loginAdmin(emailInput, passwordInput);
+    });
+}
+// Функция выхода из системы
+async function logout() {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+        console.error('Ошибка при выходе:', error.message);
+        return;
+    }
+    
+    // Переключаем экраны обратно
+    const loginScreen = document.getElementById('login-screen');
+    const dashboard = document.getElementById('dashboard');
+    
+    if (loginScreen && dashboard) {
+        dashboard.style.display = 'none';  // Прячем дашборд
+        loginScreen.style.display = 'block'; // Показываем форму ввода
+        
+        // Чистим поля формы, чтобы данные не оставались
+        document.getElementById('admin-email').value = '';
+        document.getElementById('admin-password').value = '';
+    }
+    console.log('Вы успешно вышли из системы');
+}
+// Делаем функцию доступной глобально для HTML-кнопки
+window.logout = logout;
+
+// Логика показа/скрытия пароля
+const togglePasswordBtn = document.getElementById('toggle-password');
+const passwordInput = document.getElementById('admin-password');
+
+if (togglePasswordBtn && passwordInput) {
+    togglePasswordBtn.addEventListener('click', function () {
+        // Если тип сейчас password — меняем на text, и наоборот
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Визуально подсвечиваем или тушим глазок при нажатии
+        this.classList.toggle('active');
     });
 }
