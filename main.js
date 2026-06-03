@@ -212,10 +212,8 @@ async function loginAdmin(email, password) {
     }
 
     console.log('Успешный вход!', data);
-    alert('Вы успешно вошли в систему!');
-    
-    return data;
     window.location.href = './admin.html';
+    return data;
 }
 
 // 2. Привязываем эту функцию к форме в админке
