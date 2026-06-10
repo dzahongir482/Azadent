@@ -1,3 +1,10 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Если мы уже входили ранее — сразу открываем панель
+    if (localStorage.getItem('isAdmin') === 'true') {
+        if(document.getElementById('login-form-block')) document.getElementById('login-form-block').style.display = 'none';
+        if(document.getElementById('dashboard')) document.getElementById('dashboard').style.display = 'block';
+    }
+});
 // Sticky Header + Изменение цвета при скролле
 window.addEventListener('scroll', () => {
     const header = document.getElementById('header');
@@ -33,24 +40,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// 2. ИНИЦИАЛИЗАЦИЯ SUPABASE
-const supabaseUrl = 'https://prlsmoumlgkqjwjqrlsn.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybHNtb3VtbGdrcWp3anFybHNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDk2MjgsImV4cCI6MjA5NTgyNTYyOH0.sGH6AQng3_e7fzgVTYcP3Ya_mgXrvJuNCzksPAYxU9Q';
-
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-        persistSession: true,
-        autoRefreshToken: true
-    },
-    global: {
-        headers: {
-            'apikey': supabaseAnonKey,
-            'Authorization': `Bearer ${supabaseAnonKey}`
-        }
-    }
-});
-
-console.log("Supabase успешно инициализирован!");
 
 // 3. ОТПРАВКА ЗАЯВОК В БАЗУ ДАННЫХ (ОБЩАЯ ФУНКЦИЯ)
 
@@ -251,39 +240,13 @@ if (priceBtn) priceBtn.addEventListener('click', toggleDrawer);
 if (closeBtn) closeBtn.addEventListener('click', toggleDrawer);
 if (overlay) overlay.addEventListener('click', toggleDrawer);
 
-// Логика входа админа с безопасным переключением экранов
-async function loginAdmin(email, password) {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email, 
-        password: password
-    });
-
-    if (error) {
-        console.error('Ошибка входа:', error.message);
-        alert('Ошибка: ' + error.message);
-        return null;
-    }
-
-    console.log('Успешный вход!', data);
-    
-    const loginScreen = document.getElementById('login-screen');
-    const dashboard = document.getElementById('dashboard');
-    
-    // Безопасное переключение: меняем стили, только если элементы реально есть в HTML
-    if (loginScreen) loginScreen.style.display = 'none';
-    if (dashboard) dashboard.style.display = 'block';
-    
-    // Сразу же запускаем загрузку данных из таблицы AzaDent
-    loadLeads(); 
-    
-    return data;
-}
-
-// Привязка события к форме входа
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
+    // ОБЯЗАТЕЛЬНО добавляем async перед (e)
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Жестко блокируем перезагрузку страницы браузером
+        
+        // Получаем значения по ID полей (убедись, что в admin.html у инпутов именно такие id)
         const emailInput = document.getElementById('admin-email')?.value || '';
         const passwordInput = document.getElementById('admin-password')?.value || ''; 
         
@@ -293,31 +256,47 @@ if (loginForm) {
         }
         
         console.log('Попытка входа для:', emailInput);
-        await loginAdmin(emailInput, passwordInput);
+        
+        // Твои жестко прописанные данные для проверки
+        const VALID_EMAIL = "dzahongir482@gmail.com"; 
+        const VALID_PASSWORD = "1122334444"; 
+
+        if (emailInput === VALID_EMAIL && passwordInput === VALID_PASSWORD) {
+            alert("Успешный вход!");
+            
+            // Находим экран логина (проверь, какой ID у тебя в HTML: login-form или login-screen)
+            const loginScreen = document.getElementById('login-form') || document.getElementById('login-screen');
+            const dashboard = document.getElementById('dashboard');
+            
+            if (loginScreen) loginScreen.style.display = 'none'; 
+            if (dashboard) dashboard.style.display = 'block'; 
+            
+            // Сохраняем сессию локально
+            localStorage.setItem('isAdmin', 'true');
+            
+            // Пытаемся загрузить заявки (если функция есть)
+            if (typeof loadLeads === 'function') {
+                try {
+                    await loadLeads();
+                } catch(err) {
+                    console.log("База Supabase пока отключена, это нормально.");
+                }
+            }
+        } else {
+            alert("Неверная почта или пароль!");
+        }
     });
 }
 
+
 // Функция выхода из системы
-async function logout() {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) {
-        console.error('Ошибка при выходе:', error.message);
-        return;
-    }
-    
-    const loginScreen = document.getElementById('login-screen');
-    const dashboard = document.getElementById('dashboard');
-    
-    if (loginScreen && dashboard) {
-        dashboard.style.display = 'none';
-        loginScreen.style.display = 'block';
-        
-        if (document.getElementById('admin-email')) document.getElementById('admin-email').value = '';
-        if (document.getElementById('admin-password')) document.getElementById('admin-password').value = '';
-    }
-    console.log('Вы успешно вышли из системы');
+function handleLogout() {
+    localStorage.removeItem('isAdmin');
+    window.location.reload(); // Перезагрузит страницу и снова потребует пароль
 }
-window.logout = logout;
+// ЗАМЕНИ СТРОКУ window.logout = logout; НА:
+window.handleLogout = handleLogout;
+// (И в самом HTML у кнопки проверь, чтобы было написано onclick="handleLogout()")
 
 // Логика переключения глазка пароля
 const togglePasswordBtn = document.getElementById('toggle-password');
@@ -373,33 +352,29 @@ async function loadLeads() {
 }
 window.loadLeads = loadLeads;
 
-// Автоматическая проверка при загрузке страницы admin.html
-document.addEventListener('DOMContentLoaded', async () => {
-    // Проверяем, находимся ли мы вообще на странице админки (есть ли там таблица)
+// ЗАМЕНИ ПОСЛЕДНИЙ БЛОК DOMContentLoaded НА ЭТОТ:
+document.addEventListener('DOMContentLoaded', () => {
     const leadsBody = document.getElementById('leads-body');
-    if (!leadsBody) return; // Если это обычный индексный сайт, ничего не делаем
+    if (!leadsBody) return; // Если это не страница админки, выходим
 
-    console.log("Админка загружена, проверяем авторизацию...");
+    console.log("Админка загружена, проверяем локальную авторизацию...");
 
-    // Спрашиваем у Supabase, залогинен ли админ прямо сейчас
-    const { data: { session } } = await supabaseClient.auth.getSession();
-
-    if (session) {
-        console.log("Админ уже авторизован, принудительно загружаем заявки!");
+    if (localStorage.getItem('isAdmin') === 'true') {
+        console.log("Админ уже авторизован локально!");
         
-        // На всякий случай переключаем экраны, если они есть
-        const loginScreen = document.getElementById('login-screen');
+        const loginScreen = document.getElementById('login-form') || document.getElementById('login-screen');
         const dashboard = document.getElementById('dashboard');
+        
         if (loginScreen) loginScreen.style.display = 'none';
         if (dashboard) dashboard.style.display = 'block';
 
-        // Вызываем загрузку
-        loadLeads();
+        // Пока мы не подключили МТС Cloud, вызов loadLeads() будет писать ошибку Supabase в консоль,
+        // но форму он переключит корректно.
+        if (typeof loadLeads === 'function') loadLeads();
     } else {
-        console.log("Админ не авторизован, показываем форму входа.");
+        console.log("Админ не авторизован.");
     }
 });
-
 // Функция для загрузки одного файла в бакет AzaDent_images------------------------------------------------------------------------------------------------------
 // Вспомогательная функция отправки файла в бакет AzaDent_images
 async function uploadToSupabaseStorage(file, folder) {
